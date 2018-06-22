@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>jquery mouse</title>
+	<style>
+		html,
+		body {
+			text-align: center;
+			color: #000;
+			background-color: #353535;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		.container {
+			width: 600px;
+			margin: auto;
+			margin-top: 100px;
+		}
+
+		.content {
+			float: left;
+			position: relative;
+			height: 150px;
+			width: 150px;
+			margin: 20px;
+			overflow: hidden;
+			background: #ccc;
+		}
+
+		.content .shade {
+			position: absolute;
+			top: 0;
+			display: none;
+			width: 100%;
+			height: 100%;
+			line-height: 100px;
+			color: #fff;
+			background: rgba(0, 0, 0, 0.7);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="content" style="background:aqua">
+			<div class="shade">
+				<p>mouse hover</p>
+			</div>
+		</div>
+
+		<div class="content" style="background:bisque">
+			<div class="shade">
+				<p>mouse hover</p>
+			</div>
+		</div>
+
+		<div class="content" style="background:cadetblue">
+			<div class="shade">
+				<p>mouse hover</p>
+			</div>
+		</div>
+
+		<div class="content" style="background:chocolate">
+			<div class="shade">
+				<p>mouse hover</p>
+			</div>
+		</div>
+
+		<div class="content" style="background:cornflowerblue">
+			<div class="shade">
+				<p>mouse hover</p>
+			</div>
+		</div>
+		<div class="content" style="background:darkkhaki">
+			<div class="shade">
+				<p>mouse hover</p>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	(function ($) {
+		$.fn.extend({
+			"mouseMove": function (child) {
+				$(this).hover(function (e) {
+					$this = $(this);
+					var ele = $this.find(child);
+					var clientX = e.clientX;
+					var clientY = e.clientY;
+					var top = parseInt($this.offset().top);
+					var bottom = parseInt(top + $this.height());
+					var left = parseInt($this.offset().left);
+					var right = parseInt(left + $this.width());
+					var absTop = Math.abs(clientY - top);
+					var absBottom = Math.abs(clientY - bottom);
+					var absLeft = Math.abs(clientX - left);
+					var absRight = Math.abs(clientX - right);
+					var min = Math.min(absTop, absBottom, absLeft, absRight);
+					var eventType = e.type;
+					switch (min) {
+						case absTop:
+							animate("top", eventType, ele);
+							break;
+						case absBottom:
+							animate("bottom", eventType, ele);
+							break;
+						case absLeft:
+							animate("left", eventType, ele);
+							break;
+						case absRight:
+							animate("right", eventType, ele)
+					}
+				})
+			}
+		});
+
+		function animate(direction, type, ele) {
+			var timer = 200;
+			var $target = $(ele);
+			if (type == "mouseenter") {
+				$target.stop(true, true);
+			}
+			if (direction == "top") {
+				if (type == "mouseenter") {
+					$target.css({
+						display: "block",
+						top: "-100%",
+						left: "0"
+					}).animate({
+						top: 0,
+						left: 0
+					}, timer)
+				} else {
+					$target.animate({
+						display: "block",
+						top: "-100%",
+						left: "0"
+					}, timer)
+				}
+			} else if (direction == "left") {
+				if (type == "mouseenter") {
+					$target.css({
+						display: "block",
+						top: "0",
+						left: "-100%"
+					}).animate({
+						left: 0,
+						top: 0
+					}, timer)
+				} else {
+					$target.animate({
+						display: "block",
+						left: "-100%"
+					}, timer)
+				}
+			} else if (direction == "bottom") {
+				if (type == "mouseenter") {
+					$target.css({
+						display: "block",
+						top: "100%",
+						left: "0"
+					}).animate({
+						top: 0,
+						left: 0
+					}, timer)
+				} else {
+					$target.animate({
+						display: "block",
+						top: "100%",
+						left: "0"
+					}, timer)
+				}
+			} else if (direction == "right") {
+				if (type == "mouseenter") {
+					$target.css({
+						display: "block",
+						top: 0,
+						left: "100%"
+					}).animate({
+						left: "0%",
+						top: 0
+					}, timer)
+				} else {
+					$target.animate({
+						display: "block",
+						left: "100%"
+					}, timer)
+				}
+			}
+		}
+
+		$('.content').mouseMove('.shade')
+	})(window.jQuery);
+</script>
+</html>
